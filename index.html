@@ -903,6 +903,9 @@
  #modal .row{margin-top:16px;display:flex;gap:8px;} #modal button{border:1px solid #d0d5db;background:#f7f8fa;border-radius:8px;padding:9px 16px;cursor:pointer;font-size:14px;} #modal button.focus{background:#3949AB;color:#fff;border-color:#3949AB;}
  .legend{position:fixed;bottom:12px;left:12px;z-index:100;background:#fff;border:1px solid #dfe3e8;border-radius:10px;padding:10px 13px;font-size:12.5px;color:#444;box-shadow:0 1px 4px rgba(0,0,0,.08);line-height:1.9;}
  .legend .rod{display:inline-flex;align-items:center;gap:5px;margin-right:14px;} .legend .bar{width:14px;height:14px;border-radius:3px;display:inline-block;}
+
+ /* связи заметнее */
+ .f3 .links_view path, .f3 path.link-existing{stroke:#9aa1ab;stroke-width:2px;}
  /* lightbox */
  #lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:400;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
  #lightbox.show{display:flex;}
@@ -937,6 +940,9 @@ const LINECOL = {"t": "#3d6cc4", "v": "#8E44AD", "s": "#2E9C50", "r": "#D07C2B",
 const NOTES={},AV={},LINE={},PH2={};
 data.forEach(d=>{NOTES[d.id]=d.data.note;AV[d.id]=d.data.avatar||'';LINE[d.id]=d.data.line||'';PH2[d.id]=d.data.photos2||[];});
 const STAR=new Set(['you','t_vlad','mama','sh_alex','r_lyubaI','viktor','v_lyuba']);
+const PAIRS=[];const seen=new Set();
+data.forEach(d=>{const sp=(d.rels&&d.rels.spouses)||[];sp.forEach(s=>{const key=[d.id,s].sort().join('|');if(!seen.has(key)){seen.add(key);PAIRS.push([d.id,s]);}});});
+
 
 function openLightbox(src){var lb=document.getElementById('lightbox');document.getElementById('lightbox-img').src=src;lb.classList.add('show');}
 function closeLightbox(){document.getElementById('lightbox').classList.remove('show');}
@@ -987,6 +993,7 @@ function fitAll(){
   const tx=vw/2-(bb.x+bb.width/2)*scale, ty=vh/2-(bb.y+bb.height/2)*scale;
   g.setAttribute('transform','translate('+tx+','+ty+') scale('+scale+')');
 }
+
 setTimeout(fitAll,1000);
 
 // единый обработчик: любое фото с data-full открывается на весь экран
